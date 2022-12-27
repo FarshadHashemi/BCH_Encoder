@@ -1,5 +1,3 @@
---BCH Encoder For DVB-T2
-
 Library IEEE;
 Use IEEE.STD_LOGIC_1164.All;
 
