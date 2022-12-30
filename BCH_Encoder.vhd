@@ -1,5 +1,5 @@
-Library IEEE;
-Use IEEE.STD_LOGIC_1164.All;
+Library IEEE ;
+Use IEEE.STD_LOGIC_1164.All ;
 
 Entity BCH_Encoder Is
 
