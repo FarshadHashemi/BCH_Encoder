@@ -4,41 +4,41 @@ Use IEEE.STD_LOGIC_1164.All;
 Entity BCH_Encoder Is
 
 	Generic(
-		Kbch			:	INTEGER									:=	12432 ;
-		Nbch			:	INTEGER									:=	12600 ;
-		Polynomial	:	STD_LOGIC_VECTOR(192 downto 0)	:= "0000000000000000000000001010000000110001011011011111010101001100001101001101100100110001011001101001000111010001110010000011010010101001010001111111001111101011111010001000110010000010110100101"
+		Kbch			:	Integer									:=	12432 ;
+		Nbch			:	Integer									:=	12600 ;
+		Polynomial	:	STD_Logic_Vector(192 downto 0)	:= "0000000000000000000000001010000000110001011011011111010101001100001101001101100100110001011001101001000111010001110010000011010010101001010001111111001111101011111010001000110010000010110100101"
 	);
 	
 	Port(
-		Clock					:	IN		STD_LOGIC ;
-		Clock_Enable		:	IN		STD_LOGIC ;
-		Synchronous_Reset	:	IN		STD_LOGIC ;
-		Input_Data			:	IN		STD_LOGIC ;
-		Valid_Input_Data	:	IN		STD_LOGIC ;
-		Output_Data			:	OUT	STD_LOGIC ;
-		Valid_Output_Data	:	OUT	STD_LOGIC
+		Clock					:	In		STD_Logic ;
+		Clock_Enable		:	In		STD_Logic ;
+		Synchronous_Reset	:	In		STD_Logic ;
+		Input_Data			:	In		STD_Logic ;
+		Valid_Input_Data	:	In		STD_Logic ;
+		Output_Data			:	Out	STD_Logic ;
+		Valid_Output_Data	:	Out	STD_Logic
 	);
 		
 End BCH_Encoder ;
 
 Architecture Behavioral Of BCH_Encoder Is
 	
-	Signal	Clock_Enable_Register			:	STD_LOGIC										:= '0' ;
-	Signal	Synchronous_Reset_Register		:	STD_LOGIC										:= '0' ;
-	Signal	Input_Data_Register				:	STD_LOGIC										:= '0' ;
-	Signal	Valid_Input_Data_Register		:	STD_LOGIC										:= '0' ;
-	Signal	Output_Data_Register				:	STD_LOGIC										:= '0' ;
-	Signal	Valid_Output_Data_Register		:	STD_LOGIC										:= '0' ;
+	Signal	Clock_Enable_Register			:	STD_Logic										:= '0' ;
+	Signal	Synchronous_Reset_Register		:	STD_Logic										:= '0' ;
+	Signal	Input_Data_Register				:	STD_Logic										:= '0' ;
+	Signal	Valid_Input_Data_Register		:	STD_Logic										:= '0' ;
+	Signal	Output_Data_Register				:	STD_Logic										:= '0' ;
+	Signal	Valid_Output_Data_Register		:	STD_Logic										:= '0' ;
 	
 --	Generator Or Divisor Or Polynomial
-	Constant	Generator							:	STD_LOGIC_VECTOR(Nbch-Kbch-1 downto 0)	:= Polynomial(Nbch-Kbch-1 downto 0) ;
+	Constant	Generator							:	STD_Logic_Vector(Nbch-Kbch-1 Downto 0)	:= Polynomial(Nbch-Kbch-1 Downto 0) ;
 --	%%%%%%%%%%%%%%%%%%%%
 	
 --	Remainder
-	Signal	Remainder							:	STD_LOGIC_VECTOR(Nbch-Kbch-1 downto 0)	:= (others=>'0') ;
+	Signal	Remainder							:	STD_Logic_Vector(Nbch-Kbch-1 Downto 0)	:= (Others=>'0') ;
 --	%%%%%%%%%
 	
-	Signal	Valid_SRL							:	STD_LOGIC_VECTOR(Nbch-Kbch-1 downto 0)	:= (others=>'0') ;
+	Signal	Valid_SRL							:	STD_Logic_Vector(Nbch-Kbch-1 Downto 0)	:= (Others=>'0') ;
 	
 Begin
 	
@@ -70,7 +70,7 @@ Begin
 					Valid_Output_Data_Register	<=	Valid_SRL(Nbch-Kbch-1) AND (NOT Valid_Input_Data_Register) ;
 				--	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 				
-				If Valid_Input_Data_Register = '1' Then
+				If Valid_Input_Data_Register='1' Then
 				
 				--	Computing BCH Code
 					Remainder(0)		<=	Remainder(Nbch-Kbch-1) XOR Input_Data_Register ;
