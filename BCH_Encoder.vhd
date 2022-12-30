@@ -90,11 +90,11 @@ Begin
 			
 		End If;
 		
-	End Process;
+	End Process ;
 	
 --	Registering Output Ports
 	Output_Data			<=	Output_Data_Register ;
 	Valid_Output_Data	<=	Valid_Output_Data_Register ;
 -- %%%%%%%%%%%%%%%%%%%%%%%%	
 
-End Behavioral;
+End Behavioral ;
