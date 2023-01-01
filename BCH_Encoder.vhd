@@ -7,7 +7,7 @@ Entity BCH_Encoder Is
 		K_BCH			:	Integer									:=	12432 ;
 		N_BCH			:	Integer									:=	12600 ;
 		Polynomial	:	STD_Logic_Vector(192 downto 0)	:= "0000000000000000000000001010000000110001011011011111010101001100001101001101100100110001011001101001000111010001110010000011010010101001010001111111001111101011111010001000110010000010110100101"
-	);
+	) ;
 	
 	Port(
 		Clock					:	In		STD_Logic ;
@@ -17,7 +17,7 @@ Entity BCH_Encoder Is
 		Valid_Input_Data	:	In		STD_Logic ;
 		Output_Data			:	Out	STD_Logic ;
 		Valid_Output_Data	:	Out	STD_Logic
-	);
+	) ;
 		
 End BCH_Encoder ;
 
@@ -38,7 +38,7 @@ Architecture Behavioral Of BCH_Encoder Is
 	Signal	Remainder							:	STD_Logic_Vector(N_BCH-K_BCH-1 Downto 0)	:= (Others=>'0') ;
 --	%%%%%%%%%
 	
-	Signal	Valid_SRL							:	STD_Logic_Vector(NbN_BCHch-K_BCH-1 Downto 0)	:= (Others=>'0') ;
+	Signal	Valid_SRL							:	STD_Logic_Vector(N_BCH-K_BCH-1 Downto 0)	:= (Others=>'0') ;
 	
 Begin
 	
@@ -57,10 +57,10 @@ Begin
 		--	Reset
 			If (Synchronous_Reset_Register='1') Then
 			
-				Valid_SRL							<=	(Others=>'0') ;
-				Remainder							<=	(Others=>'0') ;
-				Output_Data_Register				<= '0' ;
-				Valid_Output_Data_Register		<=	'0' ;
+				Valid_SRL						<=	(Others=>'0') ;
+				Remainder						<=	(Others=>'0') ;
+				Output_Data_Register			<= '0' ;
+				Valid_Output_Data_Register	<=	'0' ;
 		-- %%%%%
 			
 			Elsif (Clock_Enable_Register='1') Then
@@ -70,25 +70,19 @@ Begin
 					Valid_Output_Data_Register	<=	Valid_SRL(N_BCH-K_BCH-1) AND (NOT Valid_Input_Data_Register) ;
 				--	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 				
-				If Valid_Input_Data_Register='1' Then
-				
 				--	Computing BCH Code
-					Remainder(0)		<=	Remainder(N_BCH-K_BCH-1) XOR Input_Data_Register ;
+					Remainder(0)		<=	(Remainder(N_BCH-K_BCH-1) XOR Input_Data_Register) AND Valid_Input_Data_Register ;
 					For i In 1 To (N_BCH-K_BCH-1) Loop
-						Remainder(i)	<=	(Remainder(N_BCH-K_BCH-1) AND Generator(i)) XOR Remainder(i-1) ;
+						Remainder(i)	<=	(Remainder(N_BCH-K_BCH-1) AND Generator(i) AND Valid_Input_Data_Register) XOR Remainder(i-1) ;
 					End Loop ;
 				--	%%%%%%%%%%%%%%%%%%
-					
-				Else
-					
-					Remainder				<=	Remainder(N_BCH-K_BCH-2 Downto 0) & '0' ;
+				
 					Output_Data_Register	<=	Remainder(N_BCH-K_BCH-1) ;
 					
-				End If ;
 			
 			End If ;
 			
-		End If;
+		End If ;
 		
 	End Process ;
 	
